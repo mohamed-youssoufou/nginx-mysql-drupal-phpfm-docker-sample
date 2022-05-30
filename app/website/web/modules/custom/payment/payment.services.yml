@@ -1,0 +1,3 @@
+services:
+  payment.say_hi:
+    class: Drupal\payment\Services\SayHi

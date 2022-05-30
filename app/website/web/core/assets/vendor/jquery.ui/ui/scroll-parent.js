@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Scroll Parent 1.13.1
+ * jQuery UI Scroll Parent 1.12.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -13,8 +13,6 @@
 //>>docs: http://api.jqueryui.com/scrollParent/
 
 ( function( factory ) {
-	"use strict";
-
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -24,8 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} )( function( $ ) {
-"use strict";
+} ( function( $ ) {
 
 return $.fn.scrollParent = function( includeHidden ) {
 	var position = this.css( "position" ),
@@ -45,4 +42,4 @@ return $.fn.scrollParent = function( includeHidden ) {
 		scrollParent;
 };
 
-} );
+} ) );

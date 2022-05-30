@@ -2,7 +2,6 @@
 
 namespace Drupal\Core\Composer;
 
-use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\Installer\PackageEvent;
 use Composer\Script\Event;
 use Composer\Semver\Constraint\Constraint;
@@ -187,7 +186,7 @@ class Composer {
     $vendor_dir = $event->getComposer()->getConfig()->get('vendor-dir');
     $io = $event->getIO();
     $op = $event->getOperation();
-    if ($op instanceof UpdateOperation) {
+    if ($op->getJobType() == 'update') {
       $package = $op->getTargetPackage();
     }
     else {

@@ -8,7 +8,7 @@ import {
   clickOutsideHandler,
 } from 'ckeditor5/src/ui';
 
-import { getClosestSelectedDrupalMediaWidget, isDrupalMedia } from '../utils';
+import { getSelectedDrupalMediaWidget, isDrupalMedia } from '../utils';
 import {
   getBalloonPositionData,
   repositionContextualBalloon,
@@ -23,21 +23,21 @@ import TextAlternativeFormView from './ui/textalternativeformview';
  */
 export default class MediaImageTextAlternativeUi extends Plugin {
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   static get requires() {
     return [ContextualBalloon];
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   static get pluginName() {
     return 'MediaImageTextAlternativeUi';
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init() {
     this._createButton();
@@ -45,7 +45,7 @@ export default class MediaImageTextAlternativeUi extends Plugin {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   destroy() {
     super.destroy();
@@ -121,10 +121,9 @@ export default class MediaImageTextAlternativeUi extends Plugin {
       cancel();
     });
 
-    // Reposition the balloon or hide the form if a media widget is no longer
-    // selected.
+    // Reposition the balloon or hide the form if an image widget is no longer selected.
     this.listenTo(editor.ui, 'update', () => {
-      if (!getClosestSelectedDrupalMediaWidget(viewDocument.selection)) {
+      if (!getSelectedDrupalMediaWidget(viewDocument.selection)) {
         this._hideForm(true);
       } else if (this._isVisible) {
         repositionContextualBalloon(editor);

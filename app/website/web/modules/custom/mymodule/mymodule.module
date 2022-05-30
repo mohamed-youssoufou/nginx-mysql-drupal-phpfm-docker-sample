@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Implements hook_form_FORM_ID_alter(). */
+function
+mymodule_form_drupalform_example_form_alter(
+    &$form,
+    \Drupal\Core\Form\FormStateInterface $form_state
+) {
+    // $form['site_phone'] = [
+    //     '#type' => 'tel',
+    //     '#title' => t('Site phone')
+    // ];
+}

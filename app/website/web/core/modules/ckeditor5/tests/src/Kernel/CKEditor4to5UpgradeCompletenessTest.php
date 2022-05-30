@@ -5,9 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\Tests\ckeditor5\Kernel;
 
 use Drupal\ckeditor\CKEditorPluginConfigurableInterface;
-use Drupal\ckeditor5\HTMLRestrictions;
 use Drupal\ckeditor5\Plugin\CKEditor5PluginElementsSubsetInterface;
-use Drupal\Component\Assertion\Inspector;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\KernelTests\KernelTestBase;
@@ -18,19 +16,6 @@ use Drupal\KernelTests\KernelTestBase;
  * @internal
  */
 class CKEditor4to5UpgradeCompletenessTest extends KernelTestBase {
-
-  /**
-   * The CKEditor 4 toolbar buttons that no longer require a contrib module.
-   *
-   * @var string[]
-   *
-   * @see \Drupal\ckeditor5\Plugin\CKEditor4To5Upgrade\Contrib
-   */
-  const CONTRIB_BUTTONS_NOW_IN_CORE = [
-    // @see https://www.drupal.org/project/codetag
-    // @see ckeditor5_code's `basicStyles.Code` plugin
-    'Code',
-  ];
 
   /**
    * The "CKEditor 4 plugin" plugin manager.
@@ -102,16 +87,13 @@ class CKEditor4to5UpgradeCompletenessTest extends KernelTestBase {
    */
   public function testButtons(): void {
     $cke4_buttons = array_keys(NestedArray::mergeDeepArray($this->cke4PluginManager->getButtons()));
-    $cke4_buttons = array_merge($cke4_buttons, self::CONTRIB_BUTTONS_NOW_IN_CORE);
 
     foreach ($cke4_buttons as $button) {
-      $equivalent = $this->upgradePluginManager->mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem($button, HTMLRestrictions::emptySet());
-      $this->assertTrue($equivalent === NULL || (is_array($equivalent) && Inspector::assertAllStrings($equivalent)));
-      // The returned equivalent CKEditor 5 toolbar item(s) must exist.
+      $equivalent = $this->upgradePluginManager->mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem($button);
+      $this->assertTrue($equivalent === NULL || is_string($equivalent));
+      // The returned equivalent CKEditor 5 toolbar item must exist.
       if (is_string($equivalent)) {
-        foreach (explode(',', $equivalent) as $equivalent_cke5_toolbar_item) {
-          $this->assertArrayHasKey($equivalent_cke5_toolbar_item, $this->cke5PluginManager->getToolbarItems());
-        }
+        $this->assertArrayHasKey($equivalent, $this->cke5PluginManager->getToolbarItems());
       }
     }
   }
@@ -204,7 +186,7 @@ class CKEditor4to5UpgradeCompletenessTest extends KernelTestBase {
     $this->expectException(\OutOfBoundsException::class);
     $this->expectExceptionMessage('The "DrupalImage" CKEditor 4 button is already being upgraded by the "core" CKEditor4To5Upgrade plugin, the "foo" plugin is as well. This conflict needs to be resolved.');
 
-    $this->upgradePluginManager->mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem('foo', HTMLRestrictions::emptySet());
+    $this->upgradePluginManager->mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem('foo');
   }
 
   /**
@@ -217,7 +199,7 @@ class CKEditor4to5UpgradeCompletenessTest extends KernelTestBase {
     $this->expectException(\LogicException::class);
     $this->expectExceptionMessage('The "foo" CKEditor4To5Upgrade plugin claims to provide an upgrade path for the "foo" CKEditor 4 button but does not.');
 
-    $this->upgradePluginManager->mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem('foo', HTMLRestrictions::emptySet());
+    $this->upgradePluginManager->mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem('foo');
   }
 
   /**
@@ -230,7 +212,7 @@ class CKEditor4to5UpgradeCompletenessTest extends KernelTestBase {
     $this->expectException(\OutOfBoundsException::class);
     $this->expectExceptionMessage('The "stylescombo" CKEditor 4 plugin\'s settings are already being upgraded by the "core" CKEditor4To5Upgrade plugin, the "foo" plugin is as well. This conflict needs to be resolved.');
 
-    $this->upgradePluginManager->mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem('foo', HTMLRestrictions::emptySet());
+    $this->upgradePluginManager->mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem('foo');
   }
 
   /**

@@ -1,0 +1,6 @@
+name: MY MODULE
+type: module
+description: This is an example module from the Drupal 8 Cookbook!
+core_version_requirement: ^8 || ^9
+package: Core
+version: VERSION

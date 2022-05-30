@@ -69,7 +69,7 @@ interface TranslatableInterface {
    *   LanguageInterface::LANGCODE_DEFAULT
    *   to get the data in default language.
    *
-   * @return \Drupal\Core\Entity\ContentEntityInterface
+   * @return $this
    *   A typed data object for the translated data.
    *
    * @throws \InvalidArgumentException
@@ -80,8 +80,7 @@ interface TranslatableInterface {
   /**
    * Returns the translatable object in the language it was created.
    *
-   * @return \Drupal\Core\Entity\ContentEntityInterface
-   *   The translation object referring to the original language.
+   * @return $this
    */
   public function getUntranslated();
 
@@ -110,8 +109,7 @@ interface TranslatableInterface {
    *   (optional) An array of initial values to be assigned to the translatable
    *   fields. Defaults to none.
    *
-   * @return \Drupal\Core\Entity\ContentEntityInterface
-   *   A new entity translation object.
+   * @return $this
    *
    * @throws \InvalidArgumentException
    *   If an invalid or existing translation language is specified.

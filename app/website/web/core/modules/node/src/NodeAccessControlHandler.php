@@ -173,9 +173,9 @@ class NodeAccessControlHandler extends EntityAccessControlHandler implements Nod
       // node passed in is not the default revision then check access to
       // that, too.
       $node_storage = $this->entityTypeManager->getStorage($node->getEntityTypeId());
-      $access = $this->access($node_storage->load($node->id()), $entity_operation, $account, TRUE);
+      $access = $this->access($node_storage->load($node->id()), 'view', $account, TRUE);
       if (!$node->isDefaultRevision()) {
-        $access = $access->andIf($this->access($node, $entity_operation, $account, TRUE));
+        $access = $access->orIf($this->access($node, 'view', $account, TRUE));
       }
       return $access->cachePerPermissions()->addCacheableDependency($node);
     }

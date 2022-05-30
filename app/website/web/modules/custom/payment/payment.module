@@ -1,0 +1,24 @@
+<?php
+
+namespace Drupal\Core\Routing\RouteMatchInterface;
+
+function payment_help($route_name, $route_match)
+{
+    switch ($route_name) {
+        case 'help.page.hello_world':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('This is an example module.') . '</
+        p>';
+            return $output;
+        default:
+    }
+}
+
+function payment_form_salutation_configuration_form_alter(
+    &$form,
+    $form_state,
+    $form_id
+) {
+    dd($form);
+}

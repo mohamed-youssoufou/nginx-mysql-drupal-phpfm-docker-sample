@@ -1,0 +1,47 @@
+
+ {#
+/**
+ * @file
+ * Bootstrap Barrio's override to display a menu.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link url, instance of \Drupal\Core\Url
+ *   - localized_options: Menu link localized options.
+ *   - is_expanded: TRUE if the link has visible children within the current
+ *     menu tree.
+ *   - is_collapsed: TRUE if the link has children within the current menu tree
+ *     that are not currently visible.
+ *   - in_active_trail: TRUE if the link is in the active trail.
+ */
+#}
+
+ <!-- Topbar Start -->
+    <div class="container-fluid bg-dark px-5 d-none d-lg-block">
+        <div class="row gx-0">
+            <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    {% for item in infos %}
+                       {% if loop.index <= 3%}
+                            <small class="me-3 text-light"><i class="{{item['icone']}} me-2"></i>{{item['info']}}</small>
+                       {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-lg-4 text-center text-lg-end">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    {% for item in infos %}
+                       {% if loop.index > 3%}
+                            <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="{{item['lien']}}"><i class="{{item['icone']}} fw-normal"></i></a>
+                       {% endif %}
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Topbar End -->

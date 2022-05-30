@@ -25,7 +25,7 @@ class BlockContentTypeTest extends BlockContentTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
+  protected $defaultTheme = 'classy';
 
   /**
    * Permissions to grant admin user.

@@ -1,0 +1,13 @@
+<?php
+
+function update_module_8001(){
+    $contact_form = \Drupal\contact\Entity\ContactForm::load('contactus');
+    $contact_form->setReply('Thanl you');
+}
+
+/**
+* Implements hook_install(). */
+function mymodule_install() { // Set the site name. 
+    \Drupal::configFactory()
+    ->getEditable('system.site') ->set('name', 'Test update site name') ->save();
+}

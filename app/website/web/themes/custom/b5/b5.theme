@@ -1,0 +1,178 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the SASS Starterkit subtheme.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Entity\File;
+use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_form_system_theme_settings_alter() for settings form.
+ *
+ * Replace Barrio setting options with subtheme ones.
+ *
+ * Example on how to alter theme settings form
+ */
+function bootstrap_barrio_subtheme_form_system_theme_settings_alter(&$form, FormStateInterface $form_state)
+{
+  $form['components']['navbar']['bootstrap_barrio_navbar_top_background']['#options'] = [
+    'bg-primary' => t('Primary'),
+    'bg-secondary' => t('Secondary'),
+    'bg-light' => t('Light'),
+    'bg-dark' => t('Dark'),
+    'bg-white' => t('White'),
+    'bg-transparent' => t('Transparent'),
+  ];
+  $form['components']['navbar']['bootstrap_barrio_navbar_background']['#options'] = [
+    'bg-primary' => t('Primary'),
+    'bg-secondary' => t('Secondary'),
+    'bg-light' => t('Light'),
+    'bg-dark' => t('Dark'),
+    'bg-white' => t('White'),
+    'bg-transparent' => t('Transparent'),
+  ];
+}
+
+// function b5_preprocess_user(&$variables) {
+//   /** @var User $account */
+//   $account = $variables['elements']['#user'];
+
+
+//   // dump($account);die;
+//   $variables['uid'] = $account->values['uid'];
+// }
+
+// function b5_preprocess_container(&$variables){
+//   // dump($variables);
+// }
+
+// function b5_preprocess_views_view_grid(&$variables){
+//   // foreach ($variables["items"][0]["content"] as $items){
+//   //   foreach($items as $itemsList){
+//   //     foreach($itemsList["content"] as $item){
+
+//   //     }
+
+//   //   }
+//   // }
+//   // $variables['test'] = ["content"]["#view"]->field["webform_submission_value"]->original_value;
+//   // $variables['test'] = $variables["items"][0]["content"][0]["content"]["#view"]->field["webform_submission_value"]->original_value;
+//   // dump($variables["items"][0]["content"]);die;
+// }
+
+// function b5_preprocess_block(&$variables){
+//   $variables['user'] = "/user/".\Drupal::currentUser()->id();
+// }
+
+//function
+function b5_preprocess_status_messages(&$variables) {
+  // dump($variables);
+}
+function b5_preprocess_menu__account(&$variables)
+{
+
+  // get node by entity type
+  $is_home_page = false;
+  if(preg_match("/^\/$/", $_SERVER['REQUEST_URI'])) {
+    $is_home_page = true;
+  }
+  $variables['is_home_page'] = $is_home_page;
+  $title = "";
+  switch ($_SERVER['REQUEST_URI']){
+    case 'rechercher-mes-declarations':
+      $title = "Nos Déclarations";
+      break;
+    case 'statistique':
+      $title = "Nos Statistiques";
+      break;
+    case 'nous_contactez':
+      $title = "Nous Contactez";
+      break;
+    default:
+      $title = "";
+  }
+
+  $variables['title'] = $title;
+
+  $query = \Drupal::entityQuery('node');
+  $query->condition('type', 'des_citations_celebres');
+  $entity_ids = $query->execute();
+  // load data
+  foreach ($entity_ids as $id => $nid) {
+    $variables["citations"][$id]["title"] = \Drupal::entityTypeManager()->getStorage('node')->load($nid)->get('title')->value;
+    $variables["citations"][$id]["field_citations"] = \Drupal::entityTypeManager()->getStorage('node')->load($nid)->get('field_citations')->value;
+    $variables["citations"][$id]["field_photo"] = File::load(\Drupal::entityTypeManager()->getStorage('node')->load($nid)->get('field_photo')->target_id)->getFileUri();
+  }
+}
+
+function b5_preprocess_menu__main(&$variables)
+{
+  $query = \Drupal::entityQuery('node');
+  $query->condition('type', 'information_generale');
+  $entity_ids = $query->execute();
+  foreach ($entity_ids as $id => $nid) {
+    // dump(\Drupal::entityTypeManager()->getStorage('node')->load($nid));die;
+    $variables["infos"][$id]["icone"] = \Drupal::entityTypeManager()->getStorage('node')->load($nid)->get('field_icone')->value;
+    $variables["infos"][$id]["info"] = \Drupal::entityTypeManager()->getStorage('node')->load($nid)->get('field_info')->value;
+    $variables["infos"][$id]["lien"] = \Drupal::entityTypeManager()->getStorage('node')->load($nid)->get('field_lien')->value;
+  }
+}
+
+function b5_preprocess_page(&$variables)
+{
+  $current_path = \Drupal::service('path.current')->getPath();
+  if ($current_path == '/webform/ajouter_une_declaration') {
+    $current_user = \Drupal::currentUser();
+    $fields = User::load($current_user->id())->toArray();
+
+    if (count($fields['field_profession'])) {
+      switch ($fields['field_profession'][0]["target_id"]) {
+          //Eleve
+        case '27':
+          if (!count($fields['field_etablissement'])) {
+            redirectToUserEditPage();
+          }
+          break;
+          //etudiant
+        case '26':
+          if (!count($fields['field_etablissement']) &&
+              !count($fields['field_filiere']) &&
+              !count($fields['field_situation_matrimoniale'])) {
+            redirectToUserEditPage();
+          }
+          break;
+          //Travailleur
+        case '28':
+          if (!count($fields['field_etablissement']) &&
+              !count($fields['field_filiere']) &&
+              !count($fields['field_nombre_de_fille']) &&
+              !count($fields['field_nombre_de_garcon']) &&
+              !count($fields['field_nombre_de_tutel']) &&
+              !count($fields['field_nombre_de_tutel_direct']) &&
+              !count($fields['field_nombre_de_tutel_indirect']) &&
+              !count($fields['field_nombre_d_adoption']) &&
+              !count($fields['field_nombre_d_enfant']) &&
+              !count($fields['field_situation_matrimoniale'])
+              ) {
+            redirectToUserEditPage();
+          }
+          break;
+      }
+    } else {
+      \Drupal::messenger()->addWarning(t('Vous n\'êtes pas authoriser a créer une nouvelle déclaration, d\'abord assurer vous de complêter vos informations utilisateurs'), 'succes');
+      $response = new RedirectResponse(\Drupal\Core\Url::fromRoute('user.page')->toString());
+      $response->send();
+    }
+  }
+}
+
+function redirectToUserEditPage()
+{
+  \Drupal::messenger()->addWarning(t('Vous n\'êtes pas authoriser a créer une nouvelle déclaration, d\'abord assurer vous de complêter vos informations utilisateurs'), 'succes');
+  $response = new RedirectResponse(\Drupal\Core\Url::fromRoute('user.page')->toString());
+  $response->send();
+}

@@ -1,0 +1,93 @@
+{#
+/**
+ * @file
+ * Bootstrap Barrio's override to display Menu Account.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link url, instance of \Drupal\Core\Url
+ *   - localized_options: Menu link localized options.
+ *   - is_expanded: TRUE if the link has visible children within the current
+ *     menu tree.
+ *   - is_collapsed: TRUE if the link has children within the current menu tree
+ *     that are not currently visible.
+ *   - in_active_trail: TRUE if the link is in the active trail.
+ */
+#}
+{#{%if is_home_page == false %}
+  <style>
+    .navbar{
+      position: relative;
+      background-color: black;
+      margin-bottom: 4rem;
+    }
+  </style>
+{%endif%}#}
+<!-- Navbar & Hero Start -->
+	<div class="container-fluid position-relative p-0"> <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
+		<a href="/" class="navbar-brand p-0">
+			<h1 class="text-primary m-0">
+				<i class="fa fa-map-marker-alt me-3"></i>BAI-CI</h1>
+			<!-- <img src="img/logo.png" alt="Logo"> -->
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+			<span class="fa fa-bars"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarCollapse">
+			<div class="navbar-nav ms-auto py-0">
+			{% for item in items %}
+				{% if loop.index <= 3 %}
+					<a href="{{item.url}}" class="nav-item nav-link {{ item.in_active_trail == true ? 'active' : '' }}">{{item.title}}</a>
+				{% endif %}
+      		{% endfor %}
+			{% if items["user.page"].title == "Mon compte" %}
+				<div class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Salut, {{user.getAccountName()|capitalize}}</a>
+				<div class="dropdown-menu m-0">
+            {% for item in items %}
+              {% if loop.index > 3 %}
+				<a href="{{item.url}}" class="dropdown-item">{{item.title}}</a>
+              {% endif %}
+            {% endfor %}
+				</div>
+			</div>
+		</div>
+		{% else %}
+			</div>
+			<a href="/user/login" class="btn btn-primary rounded-pill py-2 px-4">
+				S'identifier
+			</a>
+		{% endif %}
+	</div>
+</nav>
+
+{#{% if is_home_page %}#}
+<div class="container-fluid bg-primary py-5 mb-5 hero-header" style="background: linear-gradient(rgba(20, 20, 31, .7), rgba(20, 20, 31, .7)), url({{ base_path ~ directory }}/img/bg-hero.jpg)">
+	<div class="container py-5">
+		<div class="row justify-content-center py-5">
+			<!-- Testimonial Start -->
+			<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+				<div class="container">
+					<div class="owl-carousel testimonial-carousel position-relative">
+					{% for item in citations %}
+						<div class="testimonial-item bg-white text-center border p-4">
+							<img class="bg-white rounded-circle shadow p-1 mx-auto mb-3" src="{{ file_url(item['field_photo']) }}" style="width: 80px; height: 80px;">
+							<h5 class="mb-0">{{item['title']}}</h5>
+							<p class="mb-0">{{ item['field_citations'] }}</p>
+						</div>
+					{% endfor %}
+					</div>
+				</div>
+			</div>
+			<!-- Testimonial End -->
+		</div>
+	</div>
+</div></div><!-- Navbar & Hero End -->
+{#{% else %}
+
+{% endif %}#}
+

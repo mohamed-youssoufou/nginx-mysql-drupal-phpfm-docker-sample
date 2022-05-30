@@ -1,0 +1,201 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+
+{# <div class="container-xxl py-5">
+	<div class="container">
+		<div class="row g-5">
+			<div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+				<div class="position-relative h-100">
+					<img class="img-fluid position-absolute w-100 h-100" src="{{ file_url('public://img/Photo.1117a900.png') }}" alt="" style="object-fit: cover;">
+				</div>
+			</div>
+			<div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+				<h6 class="section-title bg-white text-start text-primary pe-3">Auteur</h6>
+				<h1 class="mb-4">
+					<span class="text-primary">AKPEKABOU VODANDE Gutemberg</span>
+				</h1>
+				<p class="mb-4">Chef de Service Recherche Développement Innovaion chez PALMAFRIQUE, Exécutif du Centre des Innovaions 
+					                de PALMAFRIQUE, Directeur Exécutif du Programme de Recherche Appliquée e de Développement Durable d'APRI.
+				</p>
+				<div class="row gy-2 gx-4 mb-4">
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>Ig Bsc.</p>
+					</div>
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>Msc</p>
+					</div>
+                    <div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>PhD du génie industriel de l'ingénierie des Procédés Chimiques Agroalimentaires, Pharmaceutiques, Biotechnologies</p>
+					</div>
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>MBA</p>
+					</div>
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>Expertises analytiques, Sécurité et Santé au Travail, environnemenaux</p>
+					</div>
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>Expertises analytiques, Sécurité et Santé au Travail, environnemenaux</p>
+					</div>
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>Chercheur recherche et développement</p>
+					</div>
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>Innovateur</p>
+					</div>
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>Inventeur</p>
+					</div>
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>Ethicien</p>
+					</div>
+					<div class="col-sm-6">
+						<p class="mb-0">
+							<i class="fa fa-arrow-right text-primary me-2"></i>Innovateur</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> #}
+
+{{ attach_library('bootstrap_barrio/form') }}
+<form{{ attributes }}>
+  {{ children }}
+</form>
+{% block javascripts %}
+    <script>
+		console.log('ici')
+		let professionField = document.querySelector('#edit-field-profession')
+		let etablissement = document.querySelector('.form-item-field-etablissement')
+		let filiere = document.querySelector('.form-item-field-filiere')
+		let situation_mat = document.querySelector('.form-item-field-situation-matrimoniale')
+		let situation_mat_edit = document.querySelector('#edit-field-situation-matrimoniale')
+		let nombre_enfant = document.querySelector('.form-item-field-nombre-d-enfant-0-value')
+		let nombre_fille = document.querySelector('.form-item-field-nombre-de-fille-0-value')
+		let nombre_garcon = document.querySelector('.form-item-field-nombre-de-garcon-0-value')
+		let nombre_adoption = document.querySelector('.form-item-field-nombre-d-adoption-0-value')
+		let nombre_tutel = document.querySelector('.form-item-field-nombre-de-tutel-0-value')
+		let nombre_direct = document.querySelector('.form-item-field-nombre-de-tutel-direct-0-value')
+		let nombre_indirect = document.querySelector('.form-item-field-nombre-de-tutel-indirect-0-value')
+		let regime = document.querySelector('.field--name-field-regime')
+		
+		// if selected
+		professionField.addEventListener('change', function(e){
+			let selected = getSelectedOption(professionField).textContent.toUpperCase();
+			showIf(selected)
+		})
+
+		// if mounted 
+		let selected = getSelectedOption(professionField).textContent.toUpperCase();
+		showIf(selected)
+
+		
+		if(situation_mat.style.display == "none"){
+			showRegime('- Aucun(e) -'.toUpperCase());
+		}
+
+	
+			situation_mat.addEventListener('change', function(e){
+				console.log(situation_mat, 'i')
+				let selected = getSelectedOption(situation_mat_edit).textContent.toUpperCase();
+				showRegime(selected)
+			})
+
+
+		function showRegime(selected2){
+			if(selected2 == "Celibataire".toUpperCase()){
+				regime.style.display = "none"
+			}else if(selected2 == "- Aucun(e) -".toUpperCase()){
+				regime.style.display = "none"
+			}else if(selected2 == "Divorcé".toUpperCase()){
+				regime.style.display = "none"
+			}else if(selected2 == "Marié".toUpperCase()){
+				regime.style.display = "block"
+			}
+		}
+
+		function showIf(selected){
+			if(selected == "Travailleur".toUpperCase()){
+				etablissement.style.display = "none"
+				filiere.style.display = "none"
+				situation_mat.style.display = "block"
+				nombre_enfant.style.display = "block"
+				nombre_fille.style.display = "block"
+				nombre_garcon.style.display = "block"
+				nombre_adoption.style.display = "block"
+				nombre_direct.style.display = "block"
+				nombre_indirect.style.display = "block"
+				nombre_tutel.style.display = "block"
+				regime.style.display = "block"
+			}else if(selected == "Eleve".toUpperCase()){
+				etablissement.style.display = "block"
+				filiere.style.display = "none"
+				situation_mat.style.display = "none"
+				nombre_enfant.style.display = "none"
+				nombre_fille.style.display = "none"
+				nombre_garcon.style.display = "none"
+				nombre_adoption.style.display = "none"
+				nombre_direct.style.display = "none"
+				nombre_indirect.style.display = "none"
+				nombre_tutel.style.display = "none"
+				regime.style.display = "none"
+			}else if(selected == "- Aucun(e) -".toUpperCase()){
+				etablissement.style.display = "none"
+				filiere.style.display = "none"
+				situation_mat.style.display = "none"
+				nombre_enfant.style.display = "none"
+				nombre_fille.style.display = "none"
+				nombre_garcon.style.display = "none"
+				nombre_adoption.style.display = "none"
+				nombre_direct.style.display = "none"
+				nombre_indirect.style.display = "none"
+				regime.style.display = "none"
+				nombre_tutel.style.display = "none"
+			}
+			else{
+				etablissement.style.display = "block"
+				filiere.style.display = "block"
+				situation_mat.style.display = "none"
+				nombre_enfant.style.display = "none"
+				nombre_fille.style.display = "none"
+				nombre_garcon.style.display = "none"
+				nombre_adoption.style.display = "none"
+				nombre_direct.style.display = "none"
+				nombre_indirect.style.display = "none"
+				nombre_tutel.style.display = "none"
+				regime.style.display = "none"
+			}
+		}
+
+		function getSelectedOption(sel) {
+			var opt;
+			for ( var i = 0, len = sel.options.length; i < len; i++ ) {
+				opt = sel.options[i];
+				if ( opt.selected === true ) {
+					break;
+				}
+			}
+			return opt;
+		}
+	</script>
+{% endblock %}

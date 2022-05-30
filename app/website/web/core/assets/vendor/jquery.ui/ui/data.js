@@ -1,5 +1,5 @@
 /*!
- * jQuery UI :data 1.13.1
+ * jQuery UI :data 1.12.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -13,8 +13,6 @@
 //>>docs: http://api.jqueryui.com/data-selector/
 
 ( function( factory ) {
-	"use strict";
-
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -24,10 +22,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} )( function( $ ) {
-"use strict";
-
-return $.extend( $.expr.pseudos, {
+} ( function( $ ) {
+return $.extend( $.expr[ ":" ], {
 	data: $.expr.createPseudo ?
 		$.expr.createPseudo( function( dataName ) {
 			return function( elem ) {
@@ -40,4 +36,4 @@ return $.extend( $.expr.pseudos, {
 			return !!$.data( elem, match[ 3 ] );
 		}
 } );
-} );
+} ) );

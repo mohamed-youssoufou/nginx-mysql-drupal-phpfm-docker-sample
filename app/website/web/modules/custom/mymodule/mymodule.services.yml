@@ -1,0 +1,5 @@
+services:
+  mymodule_router_services:
+    class: 'Drupal\mymodule\EventSubscriber\RouteSubscriber'
+    tags:
+      - { name: event_subscriber }

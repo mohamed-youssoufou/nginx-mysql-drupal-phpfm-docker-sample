@@ -120,12 +120,6 @@ class MigrateSystemConfigurationTest extends MigrateDrupal6TestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    // Delete 'site_frontpage' in order to test the migration of a non-existing
-    // front page link.
-    $this->sourceDatabase->delete('variable')
-      ->condition('name', 'site_frontpage')
-      ->execute();
-
     $migrations = [
       'd6_system_cron',
       'd6_system_date',
@@ -148,7 +142,7 @@ class MigrateSystemConfigurationTest extends MigrateDrupal6TestBase {
     foreach ($this->expectedConfig as $config_id => $values) {
       $actual = \Drupal::config($config_id)->get();
       unset($actual['_core']);
-      $this->assertSame($values, $actual, $config_id . ' matches expected values.');
+      $this->assertSame($actual, $values, $config_id . ' matches expected values.');
     }
   }
 

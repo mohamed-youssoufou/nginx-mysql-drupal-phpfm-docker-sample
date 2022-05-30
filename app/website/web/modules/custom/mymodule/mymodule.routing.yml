@@ -1,0 +1,15 @@
+mymodule_index:
+  path: '/voir-plus'
+  defaults:
+    _controller: '\Drupal\mymodule\Controller\AppController::index'
+    _title: 'this is my title'
+  requirements:
+     _access: 'TRUE'
+
+mymodule_example_form:
+  path: '/form-example'
+  defaults:
+    _title: 'Rempir de formulaire-ci'
+    _form: '\Drupal\mymodule\form\ExampleForm'
+  requirements:
+    _access: 'TRUE'

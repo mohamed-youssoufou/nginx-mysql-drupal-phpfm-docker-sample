@@ -8,27 +8,35 @@ services:
       env_file:
           - ./.env.local
       environment:
-          - MYSQL_DATABASE=${MYSQL_DATABASE}
-          - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
-          - MYSQL_USER=${MYSQL_USER}
-          - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-          - MYSQL_ALLOW_EMPTY_PASSWORD=${MYSQL_ROOT_USER}
-          - MYSQL_RANDOM_ROOT_PASSWORD=""
+          - MARIADB_ROOT_PASSWORD=root
+          - MARIADB_DATABASE=bai
+          - MARIADB_USER=root
+        #   - MARIADB_MYSQL_LOCALHOST_USER=root
       volumes:
           - ./build/mysql/data/:/var/lib/mysql
       ports:
-          - "3307:3306"
+          - "3308:3306"
       expose:
-          - "3307"
+          - "3308"
       command: --default-authentication-plugin=mysql_native_password
       networks:
           - overlay
+  bai_phpmyadmin:
+      build: ./build/phpmyadmin
+      restart: always
+      ports:
+        - 8080:80
+      environment:
+        - PMA_ARBITRARY=1
+        - UPLOAD_LIMIT=21722226000
+      networks:
+        - overlay
   bai_nginx:
       build: ./build/nginx
       container_name: bai_server
       restart: always
       ports:
-          - "8000:80" # Web
+          - 80:80 # Web
       volumes:
           - ./build/nginx/logs/:/var/log/nginx
           - ./app/website:/var/www/html
@@ -38,11 +46,14 @@ services:
       build: ./build/phpfpm
       container_name: php
       hostname: bai_phpfpm
-      restart: always
+      privileged: true
+    #   restart: always
       volumes:
           - ./app/website:/var/www/html
+          - ./build/phpfpm/php-ini-overrides.ini:/usr/local/etc/php/conf.d/opcache.ini
       ports:
         - 9000:9000
+    #   command: bash -c "composer update --ignore-platform-reqs"
       networks:
           - overlay
 networks:

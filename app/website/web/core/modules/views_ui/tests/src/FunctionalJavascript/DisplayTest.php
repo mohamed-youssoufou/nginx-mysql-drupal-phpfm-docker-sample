@@ -31,7 +31,7 @@ class DisplayTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
+  protected $defaultTheme = 'classy';
 
   public static $testViews = ['test_content_ajax', 'test_display'];
 
@@ -94,7 +94,7 @@ class DisplayTest extends WebDriverTestBase {
     $page = $this->getSession()->getPage();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
-    $selector = '.views-element-container';
+    $selector = '.view-test-display';
     $this->toggleContextualTriggerVisibility($selector);
 
     $element = $this->getSession()->getPage()->find('css', $selector);

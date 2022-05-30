@@ -1,0 +1,131 @@
+.debug-bar span,
+.debug-bar a,
+.debug-bar a:visited,
+.debug-bar a:hover,
+.debug-bar a:active,
+.debug-bar a:focus,
+.debug-bar button:hover,
+.debug-bar button:active,
+.debug-bar button:focus {
+  color: #333;
+  font-size: inherit;
+  text-decoration: none;
+  line-height: 1;
+  outline: none;
+}
+
+.debug-bar *[hidden] {
+  display: none;
+}
+
+.debug-bar {
+  font-family: Tahoma, sans-serif;
+  font-size: 14px;
+  color: #333;
+  border: 3px double #777;
+  position: fixed;
+  z-index: 10001;
+  list-style: none;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  /* Reset */
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.debug-bar_top-left {
+  top: 0;
+  left: 0;
+  border-bottom-right-radius: 5px;
+  border-width: 1px 3px 3px 1px;
+}
+
+.debug-bar_top-right {
+  top: 0;
+  right: 0;
+  border-bottom-left-radius: 5px;
+  border-width: 1px 1px 3px 3px;
+  flex-direction: row-reverse;
+}
+
+.debug-bar_bottom-left {
+  bottom: 0;
+  left: 0;
+  border-top-right-radius: 5px;
+  border-width: 3px 3px 1px 1px;
+}
+
+.debug-bar_bottom-right {
+  bottom: 0;
+  right: 0;
+  border-top-left-radius: 5px;
+  border-width: 3px 1px 1px 3px;
+  flex-direction: row-reverse;
+}
+
+.debug-bar__heading {
+  /* Reset */
+  margin: 0;
+}
+
+.debug-bar__list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.debug-bar__item {
+  display: block;
+  padding: 6px 10px;
+}
+
+.debug-bar__icon-item {
+  background-repeat: no-repeat;
+  background-position: 6px center;
+  padding-left: 26px;
+}
+
+.debug-bar_top-left.debug-bar__item,
+.debug-bar_bottom-left .debug-bar__item {
+  border-left: 1px dotted #777;
+}
+
+.debug-bar_top-right .debug-bar__item,
+.debug-bar_bottom-right .debug-bar__item {
+  border-right: 1px dotted #777;
+}
+
+a.debug-bar__icon-item:focus,
+a.debug-bar__icon-item:hover {
+  background-color: #fff3cb;
+  color: #000;
+}
+
+a.debug-bar__icon-item:active {
+  background-color: #f5e5b3;
+}
+
+.debug-bar__toggler {
+  border: none;
+  padding: 8px;
+  background: transparent url('../images/plus.png') no-repeat center;
+  display: block;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
+
+.debug-bar__toggler:hover,
+.debug-bar__toggler:focus {
+  background-color: #fff3cb;
+}
+
+.debug-bar__toggler:active {
+  background-color: #f5e5b3;
+}
+
+.debug-bar__toggler.js-debug-bar__toggler_expanded {
+  background-image: url('../images/minus.png');
+}

@@ -1,0 +1,5 @@
+services:
+  bni_ci_router_subscriber:
+    class: Drupal\bni_ci\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

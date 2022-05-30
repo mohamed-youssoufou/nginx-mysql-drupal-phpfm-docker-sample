@@ -9,11 +9,8 @@ use Drupal\Tests\ckeditor5\Traits\CKEditor5TestTrait;
 use Drupal\ckeditor5\Plugin\Editor\CKEditor5;
 use Symfony\Component\Validator\ConstraintViolation;
 
-// cspell:ignore gramma sourceediting
-
 /**
  * @coversDefaultClass \Drupal\ckeditor5\Plugin\CKEditor5Plugin\SourceEditing
- * @covers \Drupal\ckeditor5\Plugin\CKEditor5PluginManager::getCKEditor5PluginConfig()
  * @group ckeditor5
  * @internal
  */
@@ -62,7 +59,7 @@ class SourceEditingTest extends CKEditor5TestBase {
         'filter_html' => [
           'status' => TRUE,
           'settings' => [
-            'allowed_html' => '<div class> <p> <br> <a href>',
+            'allowed_html' => '<p> <br> <a href>',
           ],
         ],
         'filter_align' => ['status' => TRUE],
@@ -81,7 +78,7 @@ class SourceEditingTest extends CKEditor5TestBase {
         ],
         'plugins' => [
           'ckeditor5_sourceEditing' => [
-            'allowed_tags' => ['<div class>'],
+            'allowed_tags' => [],
           ],
         ],
       ],
@@ -108,59 +105,13 @@ class SourceEditingTest extends CKEditor5TestBase {
       'type' => 'page',
       'title' => 'Animals with strange names',
       'body' => [
-        'value' => '<div class="llama" data-llama="🦙"><p data-llama="🦙">The <a href="https://example.com/pirate" class="button" data-grammar="subject">pirate</a> is <a href="https://example.com/irate" class="use-ajax" data-grammar="adjective">irate</a>.</p></div>',
+        'value' => '<p>The <a href="https://example.com/pirate" class="button" data-grammar="subject">pirate</a> is <a href="https://example.com/irate" class="use-ajax" data-grammar="adjective">irate</a>.</p>',
         'format' => 'test_format',
       ],
     ]);
     $this->host->save();
 
     $this->drupalLogin($this->adminUser);
-  }
-
-  /**
-   * @covers \Drupal\ckeditor5\Plugin\CKEditor5Plugin\SourceEditing::buildConfigurationForm
-   */
-  public function testSourceEditingSettingsForm() {
-    $this->drupalLogin($this->drupalCreateUser(['administer filters']));
-
-    $page = $this->getSession()->getPage();
-    $assert_session = $this->assertSession();
-
-    $this->createNewTextFormat($page, $assert_session);
-    $assert_session->assertWaitOnAjaxRequest();
-
-    // The Source Editing plugin settings form should not be present.
-    $assert_session->elementNotExists('css', '[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-sourceediting"]');
-
-    $this->assertNotEmpty($assert_session->waitForElement('css', '.ckeditor5-toolbar-item-sourceEditing'));
-    $this->triggerKeyUp('.ckeditor5-toolbar-item-sourceEditing', 'ArrowDown');
-    $assert_session->assertWaitOnAjaxRequest();
-
-    // The Source Editing plugin settings form should now be present and should
-    // have no allowed tags configured.
-    $page->clickLink('Source editing');
-    $this->assertNotNull($assert_session->waitForElementVisible('css', '[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-sourceediting-allowed-tags"]'));
-
-    $javascript = <<<JS
-      const allowedTags = document.querySelector('[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-sourceediting-allowed-tags"]');
-      allowedTags.value = '<div data-foo>';
-      allowedTags.dispatchEvent(new Event('input'));
-JS;
-    $this->getSession()->executeScript($javascript);
-
-    // Immediately save the configuration. Intentionally do nothing that would
-    // trigger an AJAX rebuild.
-    $page->pressButton('Save configuration');
-
-    // Verify that the configuration was saved.
-    $this->drupalGet('admin/config/content/formats/manage/ckeditor5');
-    $page->clickLink('Source editing');
-    $this->assertNotNull($ghs_textarea = $assert_session->waitForElementVisible('css', '[data-drupal-selector="edit-editor-settings-plugins-ckeditor5-sourceediting-allowed-tags"]'));
-
-    $ghs_string = '<div data-foo>';
-    $this->assertSame($ghs_string, $ghs_textarea->getValue());
-    $allowed_html_field = $assert_session->fieldExists('filters[filter_html][settings][allowed_html]');
-    $this->assertStringContainsString($ghs_string, $allowed_html_field->getValue(), "$ghs_string not found in the allowed tags value of: {$allowed_html_field->getValue()}");
   }
 
   /**
@@ -215,83 +166,35 @@ JS;
   public function providerAllowingExtraAttributes(): array {
     return [
       'no extra attributes allowed' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate">pirate</a> is <a href="https://example.com/irate">irate</a>.</p></div>',
+        '<p>The <a href="https://example.com/pirate">pirate</a> is <a href="https://example.com/irate">irate</a>.</p>',
       ],
 
       // Common case: any attribute that is not `style` or `class`.
       '<a data-grammar="subject">' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate" data-grammar="subject">pirate</a> is <a href="https://example.com/irate">irate</a>.</p></div>',
+        '<p>The <a href="https://example.com/pirate" data-grammar="subject">pirate</a> is <a href="https://example.com/irate">irate</a>.</p>',
         '<a data-grammar="subject">',
       ],
       '<a data-grammar="adjective">' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate">pirate</a> is <a href="https://example.com/irate" data-grammar="adjective">irate</a>.</p></div>',
+        '<p>The <a href="https://example.com/pirate">pirate</a> is <a href="https://example.com/irate" data-grammar="adjective">irate</a>.</p>',
         '<a data-grammar="adjective">',
       ],
       '<a data-grammar>' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate" data-grammar="subject">pirate</a> is <a href="https://example.com/irate" data-grammar="adjective">irate</a>.</p></div>',
+        '<p>The <a href="https://example.com/pirate" data-grammar="subject">pirate</a> is <a href="https://example.com/irate" data-grammar="adjective">irate</a>.</p>',
         '<a data-grammar>',
       ],
 
       // Edge case: `class`.
       '<a class="button">' => [
-        '<div class="llama"><p>The <a class="button" href="https://example.com/pirate">pirate</a> is <a href="https://example.com/irate">irate</a>.</p></div>',
+        '<p>The <a class="button" href="https://example.com/pirate">pirate</a> is <a href="https://example.com/irate">irate</a>.</p>',
         '<a class="button">',
       ],
       '<a class="use-ajax">' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate">pirate</a> is <a class="use-ajax" href="https://example.com/irate">irate</a>.</p></div>',
+        '<p>The <a href="https://example.com/pirate">pirate</a> is <a class="use-ajax" href="https://example.com/irate">irate</a>.</p>',
         '<a class="use-ajax">',
       ],
       '<a class>' => [
-        '<div class="llama"><p>The <a class="button" href="https://example.com/pirate">pirate</a> is <a class="use-ajax" href="https://example.com/irate">irate</a>.</p></div>',
+        '<p>The <a class="button" href="https://example.com/pirate">pirate</a> is <a class="use-ajax" href="https://example.com/irate">irate</a>.</p>',
         '<a class>',
-      ],
-
-      // Edge case: $text-container wildcard with additional
-      // attribute.
-      '<$text-container data-llama>' => [
-        '<div class="llama" data-llama="🦙"><p data-llama="🦙">The <a href="https://example.com/pirate">pirate</a> is <a href="https://example.com/irate">irate</a>.</p></div>',
-        '<$text-container data-llama>',
-      ],
-      // Edge case: $text-container wildcard with stricter attribute
-      // constrain.
-      '<$text-container class="not-llama">' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate">pirate</a> is <a href="https://example.com/irate">irate</a>.</p></div>',
-        '<$text-container class="not-llama">',
-      ],
-
-      // Edge case: wildcard attribute names:
-      // - prefix, f.e. `data-*`
-      // - infix, f.e. `*gramma*`
-      // - suffix, f.e. `*-grammar`
-      '<a data-*>' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate" data-grammar="subject">pirate</a> is <a href="https://example.com/irate" data-grammar="adjective">irate</a>.</p></div>',
-        '<a data-*>',
-      ],
-      '<a *gramma*>' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate" data-grammar="subject">pirate</a> is <a href="https://example.com/irate" data-grammar="adjective">irate</a>.</p></div>',
-        '<a *gramma*>',
-      ],
-      '<a *-grammar>' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate" data-grammar="subject">pirate</a> is <a href="https://example.com/irate" data-grammar="adjective">irate</a>.</p></div>',
-        '<a *-grammar>',
-      ],
-
-      // Edge case: concrete attribute with wildcard class value.
-      '<a class="use-*">' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate">pirate</a> is <a class="use-ajax" href="https://example.com/irate">irate</a>.</p></div>',
-        '<a class="use-*">',
-      ],
-
-      // Edge case: concrete attribute with wildcard attribute value.
-      '<a data-grammar="sub*">' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate" data-grammar="subject">pirate</a> is <a href="https://example.com/irate">irate</a>.</p></div>',
-        '<a data-grammar="sub*">',
-      ],
-
-      // Edge case: `data-*` with wildcard attribute value.
-      '<a data-*="sub*">' => [
-        '<div class="llama"><p>The <a href="https://example.com/pirate" data-grammar="subject">pirate</a> is <a href="https://example.com/irate">irate</a>.</p></div>',
-        '<a data-*="sub*">',
       ],
 
       // Edge case: `style`.

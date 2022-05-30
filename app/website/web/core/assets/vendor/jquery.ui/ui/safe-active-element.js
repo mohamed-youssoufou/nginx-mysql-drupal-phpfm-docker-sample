@@ -1,6 +1,4 @@
 ( function( factory ) {
-	"use strict";
-
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -10,9 +8,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} )( function( $ ) {
-"use strict";
-
+} ( function( $ ) {
 return $.ui.safeActiveElement = function( document ) {
 	var activeElement;
 
@@ -41,4 +37,4 @@ return $.ui.safeActiveElement = function( document ) {
 	return activeElement;
 };
 
-} );
+} ) );

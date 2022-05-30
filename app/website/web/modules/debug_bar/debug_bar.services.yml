@@ -1,0 +1,29 @@
+services:
+
+  debug_bar.middleware:
+    class: Drupal\debug_bar\DebugBarMiddleware
+    arguments: ['@database']
+    tags:
+      - { name: http_middleware, priority: 1001 }
+
+  debug_bar.event_subscriber:
+    class: Drupal\debug_bar\DebugBarEventSubscriber
+    arguments:
+      - '@current_user'
+      - '@cron'
+      - '@csrf_token'
+      - '@debug_bar.builder'
+    tags:
+      - { name: event_subscriber }
+
+  debug_bar.builder:
+    class: Drupal\debug_bar\DebugBarBuilder
+    arguments:
+      - '@current_user'
+      - '@module_handler'
+      - '@config.factory'
+      - '@state'
+      - '@date.formatter'
+      - '@csrf_token'
+      - '@renderer'
+      - '@datetime.time'

@@ -3,7 +3,7 @@
  * Provides IE11 compatibility warnings when choosing a text editor.
  */
 
-((Drupal, once) => {
+((Drupal, once, Modernizr) => {
   /**
    * Presents a warning when selecting CKEditor 5 as a text format's text editor.
    *
@@ -11,7 +11,9 @@
    */
   Drupal.behaviors.ckEditor5warn = {
     attach: function attach() {
-      const isIE11 = !!document.documentMode;
+      const isIE11 = Modernizr.mq(
+        '(-ms-high-contrast: active), (-ms-high-contrast: none)',
+      );
       const editorSelect = once(
         'editor-ie11-warning',
         '[data-drupal-selector="filter-format-edit-form"] [data-drupal-selector="edit-editor-editor"], [data-drupal-selector="filter-format-add-form"] [data-drupal-selector="edit-editor-editor"]',
@@ -22,7 +24,7 @@
 
         // Add a container for messages above the text format select element.
         const selectMessageContainer = document.createElement('div');
-        select.parentNode.after(selectMessageContainer, select);
+        select.parentNode.insertBefore(selectMessageContainer, select);
         const selectMessages = new Drupal.Message(selectMessageContainer);
         const editorSettings = document.querySelector(
           '#editor-settings-wrapper',
@@ -118,4 +120,4 @@
       }
     },
   };
-})(Drupal, once);
+})(Drupal, once, Modernizr);

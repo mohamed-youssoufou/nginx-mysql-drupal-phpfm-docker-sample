@@ -1,0 +1,8 @@
+mymodule.mobile: 
+    label: Mobile 
+    mediaQuery: '' 
+    weight: 0
+mymodule.standard:
+    label: Standar
+    mediaQuery: 'only screen and (min-width: 60em)'
+    weight: 0

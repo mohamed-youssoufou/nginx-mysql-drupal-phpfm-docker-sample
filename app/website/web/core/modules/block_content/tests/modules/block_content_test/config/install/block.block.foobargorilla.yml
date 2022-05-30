@@ -4,9 +4,9 @@ dependencies:
   module:
     - block_content
   theme:
-    - stark
+    - classy
 id: foobargorilla
-theme: stark
+theme: classy
 region: content
 weight: null
 provider: null

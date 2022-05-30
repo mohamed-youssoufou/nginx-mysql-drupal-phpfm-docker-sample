@@ -1,0 +1,19 @@
+payment.index:
+  path: '/methodes-de-paiement'
+  defaults:
+    _controller: Drupal\payment\Controller\MainController::index
+    _title: 'Hello Payment page'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      params:
+        type: entity:node
+
+payment.form:
+  path: '/methodes-de-paiement/form'
+  defaults:
+    _form: Drupal\payment\Form\SayHiForm
+    _title: 'Config page'
+  requirements:
+    _permission: 'access content'

@@ -23,7 +23,7 @@ class HandlerTest extends UITestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
+  protected $defaultTheme = 'classy';
 
   /**
    * Views used by this test.
@@ -233,7 +233,7 @@ class HandlerTest extends UITestBase {
       $result = $this->assertSession()->elementTextEquals('xpath', "//a[contains(@href, '{$href}')]", $text);
 
       $this->drupalGet($href);
-      $this->assertSession()->elementTextContains('xpath', '//h1', $text);
+      $this->assertSession()->elementTextContains('xpath', '//h1[@class="page-title"]', $text);
 
       $original_configuration = [
         'field' => 'id_broken',

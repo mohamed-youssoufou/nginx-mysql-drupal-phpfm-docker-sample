@@ -12,13 +12,273 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "c3js/c3",
+                "version": "v0.4.18",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "c3"
+                },
+                "dist": {
+                    "url": "https://github.com/c3js/c3/archive/v0.4.18.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "d3/d3",
+                "version": "v3.5.17",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "d3"
+                },
+                "dist": {
+                    "url": "https://github.com/d3/d3/archive/v3.5.17.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "chartjs/chartjs",
+                "version": "v2.7.2",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "chartjs"
+                },
+                "dist": {
+                    "url": "https://www.chartjs.org/dist/2.7.2/Chart.bundle.js",
+                    "type": "file"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "billboardjs/billboard",
+                "version": "1.6.2",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "billboard"
+                },
+                "dist": {
+                    "url": "https://github.com/naver/billboard.js/archive/1.6.2.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "d3v4/d3",
+                "version": "4.9.1",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "d3v4"
+                },
+                "dist": {
+                    "url": "https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "highcharts/highcharts",
+                "version": "8.1.0",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "highcharts"
+                },
+                "dist": {
+                    "url": "https://code.highcharts.com/8.1.0/highcharts.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "highcharts/more",
+                "version": "8.1.0",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "highcharts_more"
+                },
+                "dist": {
+                    "url": "https://code.highcharts.com/8.1.0/highcharts-more.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "highcharts/exporting",
+                "version": "8.1.0",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "highcharts_exporting"
+                },
+                "dist": {
+                    "url": "https://code.highcharts.com/8.1.0/modules/exporting.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "highcharts/export-data",
+                "version": "8.1.0",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "highcharts_export-data"
+                },
+                "dist": {
+                    "url": "https://code.highcharts.com/8.1.0/modules/export-data.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "highcharts/accessibility",
+                "version": "8.1.0",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "highcharts_accessibility"
+                },
+                "dist": {
+                    "url": "https://code.highcharts.com/8.1.0/modules/accessibility.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+                "package": {
+                "name": "highcharts/3d",
+                "version": "8.1.0",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "highcharts_3d"
+                },
+                "dist": {
+                    "url": "https://code.highcharts.com/8.1.0/highcharts-3d.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "google/charts",
+                "version": "45",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "google_charts"
+                },
+                "dist": {
+                    "url": "https://www.gstatic.com/charts/loader.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+              "name": "jquery/select2",
+              "version": "4.0.5",
+              "type": "drupal-library",
+              "dist": {
+                "url": "https://github.com/select2/select2/archive/4.0.5.zip",
+                "type": "zip"
+              }
+            }
+          }
     ],
     "require": {
+        "billboardjs/billboard": "1.6.2",
+        "c3js/c3": "0.4.18",
+        "chartjs/chartjs": "2.7.2",
         "composer/installers": "^1.9",
+        "cweagans/composer-patches": "^1.7",
+        "d3/d3": "3.5.17",
+        "d3v4/d3": "4.9.1",
+        "doctrine/annotations": "^1.13",
+        "dompdf/dompdf": "0.8.0",
+        "drupal/bootstrap_barrio": "~5.1.0",
+        "drupal/chartjs_api": "^1.1",
+        "drupal/charts": "^5.0@alpha",
+        "drupal/config_filter": "^1",
+        "drupal/console": "~1.0",
         "drupal/core-composer-scaffold": "^9.3",
         "drupal/core-project-message": "^9.3",
-        "drupal/core-recommended": "^9.3"
+        "drupal/core-recommended": "^9.3",
+        "drupal/devel": "^4.1",
+        "drupal/email_verification": "^1.0",
+        "drupal/entity_print": "^2.2",
+        "drupal/features": "^3.12",
+        "drupal/gin": "^3.0@beta",
+        "drupal/gin_login": "^1.0",
+        "drupal/gin_toolbar": "^1.0@beta",
+        "drupal/mimemail": "^1.0@alpha",
+        "drupal/optgroup_taxonomy_select": "^1.1",
+        "drupal/phpmailer_smtp": "^2.0",
+        "drupal/recaptcha": "^3.0",
+        "drupal/select2": "^1.13",
+        "drupal/term_csv_export_import": "^3.0@alpha",
+        "drupal/user_email_verification": "^1.1",
+        "drupal/views_bootstrap": "^4.3",
+        "drupal/views_date_format_sql": "^3.0@alpha",
+        "drupal/webform": "^6.1",
+        "drupal/webform_config_ignore": "^1.2",
+        "drush/drush": "^11.0",
+        "google/charts": "45",
+        "highcharts/3d": "8.1.0",
+        "highcharts/accessibility": "8.1.0",
+        "highcharts/export-data": "8.1.0",
+        "highcharts/exporting": "8.1.0",
+        "highcharts/highcharts": "8.1.0",
+        "highcharts/more": "8.1.0",
+        "mikehaertl/phpwkhtmltopdf": "~2.1",
+        "tecnickcom/tcpdf": "~6"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -26,9 +286,19 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
+            "drupal/console-extend-plugin": true,
+            "cweagans/composer-patches": true
+        }
     },
     "extra": {
+        "enable-patching": true,
+        "patches": {
+        },
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
@@ -61,7 +331,8 @@
             ],
             "web/themes/custom/{$name}": [
                 "type:drupal-custom-theme"
-            ]
+            ],
+            "libraries/{$name}": ["type:drupal-library"]
         },
         "drupal-core-project-message": {
             "include-keys": [
@@ -84,5 +355,8 @@
                 "      composer remove drupal/core-project-message"
             ]
         }
+    },
+    "require-dev": {
+        "kint-php/kint": "^4.1"
     }
 }

@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Position 1.13.1
+ * jQuery UI Position 1.12.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -16,8 +16,6 @@
 //>>demos: http://jqueryui.com/position/
 
 ( function( factory ) {
-	"use strict";
-
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -27,9 +25,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} )( function( $ ) {
-"use strict";
-
+}( function( $ ) {
 ( function() {
 var cachedScrollbarWidth,
 	max = Math.max,
@@ -52,10 +48,6 @@ function parseCss( element, property ) {
 	return parseInt( $.css( element, property ), 10 ) || 0;
 }
 
-function isWindow( obj ) {
-	return obj != null && obj === obj.window;
-}
-
 function getDimensions( elem ) {
 	var raw = elem[ 0 ];
 	if ( raw.nodeType === 9 ) {
@@ -65,7 +57,7 @@ function getDimensions( elem ) {
 			offset: { top: 0, left: 0 }
 		};
 	}
-	if ( isWindow( raw ) ) {
+	if ( $.isWindow( raw ) ) {
 		return {
 			width: elem.width(),
 			height: elem.height(),
@@ -92,9 +84,9 @@ $.position = {
 			return cachedScrollbarWidth;
 		}
 		var w1, w2,
-			div = $( "<div style=" +
-				"'display:block;position:absolute;width:200px;height:200px;overflow:hidden;'>" +
-				"<div style='height:300px;width:auto;'></div></div>" ),
+			div = $( "<div " +
+				"style='display:block;position:absolute;width:50px;height:50px;overflow:hidden;'>" +
+				"<div style='height:100px;width:auto;'></div></div>" ),
 			innerDiv = div.children()[ 0 ];
 
 		$( "body" ).append( div );
@@ -127,12 +119,12 @@ $.position = {
 	},
 	getWithinInfo: function( element ) {
 		var withinElement = $( element || window ),
-			isElemWindow = isWindow( withinElement[ 0 ] ),
+			isWindow = $.isWindow( withinElement[ 0 ] ),
 			isDocument = !!withinElement[ 0 ] && withinElement[ 0 ].nodeType === 9,
-			hasOffset = !isElemWindow && !isDocument;
+			hasOffset = !isWindow && !isDocument;
 		return {
 			element: withinElement,
-			isWindow: isElemWindow,
+			isWindow: isWindow,
 			isDocument: isDocument,
 			offset: hasOffset ? $( element ).offset() : { left: 0, top: 0 },
 			scrollLeft: withinElement.scrollLeft(),
@@ -508,4 +500,4 @@ $.ui.position = {
 
 return $.ui.position;
 
-} );
+} ) );

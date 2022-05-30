@@ -119,7 +119,6 @@ class QuickEditIntegrationTest extends QuickEditJavascriptTestBase {
    * Tests if an article node can be in-place edited with Quick Edit.
    */
   public function testArticleNode() {
-    $this->markTestSkipped();
     $term = Term::create([
       'name' => 'foo',
       'vid' => 'tags',
@@ -276,7 +275,6 @@ class QuickEditIntegrationTest extends QuickEditJavascriptTestBase {
    * Tests if a custom can be in-place edited with Quick Edit.
    */
   public function testCustomBlock() {
-    $this->markTestSkipped('This test fails pretty consistently on the latest Chromedriver');
     $block_content_type = BlockContentType::create([
       'id' => 'basic',
       'label' => 'basic',

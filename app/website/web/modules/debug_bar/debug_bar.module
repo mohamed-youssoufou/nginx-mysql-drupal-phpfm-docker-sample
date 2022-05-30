@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for debug_bar module.
+ */
+
+/**
+ * Implements hook_attachments().
+ */
+function debug_bar_page_attachments(array &$page): void {
+  if (\Drupal::currentUser()->hasPermission('view debug bar')) {
+    $page['#attached']['library'][] = 'debug_bar/debug_bar';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function debug_bar_theme(): array {
+  return [
+    'debug_bar' => [
+      'variables' => [
+        'items' => [],
+        'attributes' => [],
+      ],
+    ],
+  ];
+}

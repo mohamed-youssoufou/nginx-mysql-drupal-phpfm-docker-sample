@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Keycode 1.13.1
+ * jQuery UI Keycode 1.12.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -13,8 +13,6 @@
 //>>docs: http://api.jqueryui.com/jQuery.ui.keyCode/
 
 ( function( factory ) {
-	"use strict";
-
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -24,9 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} )( function( $ ) {
-"use strict";
-
+} ( function( $ ) {
 return $.ui.keyCode = {
 	BACKSPACE: 8,
 	COMMA: 188,
@@ -46,4 +42,4 @@ return $.ui.keyCode = {
 	UP: 38
 };
 
-} );
+} ) );

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { Command } from 'ckeditor5/src/core';
-import { getClosestSelectedDrupalMediaElement } from '../utils';
+import { isDrupalMedia } from '../utils';
 import { METADATA_ERROR } from './utils';
 
 /**
@@ -15,19 +15,17 @@ export default class MediaImageTextAlternativeCommand extends Command {
    * The command value: `false` if there is no `alt` attribute, otherwise the value of the `alt` attribute.
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   refresh() {
-    const drupalMediaElement = getClosestSelectedDrupalMediaElement(
-      this.editor.model.document.selection,
-    );
+    const element = this.editor.model.document.selection.getSelectedElement();
     this.isEnabled =
-      !!drupalMediaElement &&
-      drupalMediaElement.getAttribute('drupalMediaIsImage') &&
-      drupalMediaElement.getAttribute('drupalMediaIsImage') !== METADATA_ERROR;
+      isDrupalMedia(element) &&
+      element.getAttribute('drupalMediaIsImage') &&
+      element.getAttribute('drupalMediaIsImage') !== METADATA_ERROR;
 
-    if (this.isEnabled) {
-      this.value = drupalMediaElement.getAttribute('drupalMediaAlt');
+    if (isDrupalMedia(element) && element.hasAttribute('drupalMediaAlt')) {
+      this.value = element.getAttribute('drupalMediaAlt');
     } else {
       this.value = false;
     }
@@ -42,20 +40,14 @@ export default class MediaImageTextAlternativeCommand extends Command {
    */
   execute(options) {
     const { model } = this.editor;
-    const drupalMediaElement = getClosestSelectedDrupalMediaElement(
-      model.document.selection,
-    );
+    const imageElement = model.document.selection.getSelectedElement();
 
     options.newValue = options.newValue.trim();
     model.change((writer) => {
       if (options.newValue.length > 0) {
-        writer.setAttribute(
-          'drupalMediaAlt',
-          options.newValue,
-          drupalMediaElement,
-        );
+        writer.setAttribute('drupalMediaAlt', options.newValue, imageElement);
       } else {
-        writer.removeAttribute('drupalMediaAlt', drupalMediaElement);
+        writer.removeAttribute('drupalMediaAlt', imageElement);
       }
     });
   }

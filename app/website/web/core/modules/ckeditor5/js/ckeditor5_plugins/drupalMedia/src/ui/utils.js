@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { BalloonPanelView } from 'ckeditor5/src/ui';
-import { getClosestSelectedDrupalMediaWidget } from '../utils';
+import { getSelectedDrupalMediaWidget } from '../utils';
 
 /**
  * Returns the positioning options that control the geometry of the contextual
@@ -12,7 +12,7 @@ import { getClosestSelectedDrupalMediaWidget } from '../utils';
  * @return {Object}
  *   The options.
  *
- * @private
+ * @internal
  */
 export function getBalloonPositionData(editor) {
   const editingView = editor.editing.view;
@@ -40,14 +40,12 @@ export function getBalloonPositionData(editor) {
  * @param {module:core/editor/editor~Editor} editor
  *   The editor instance.
  *
- * @private
+ * @internal
  */
 export function repositionContextualBalloon(editor) {
   const balloon = editor.plugins.get('ContextualBalloon');
 
-  if (
-    getClosestSelectedDrupalMediaWidget(editor.editing.view.document.selection)
-  ) {
+  if (getSelectedDrupalMediaWidget(editor.editing.view.document.selection)) {
     const position = getBalloonPositionData(editor);
 
     balloon.updatePosition(position);

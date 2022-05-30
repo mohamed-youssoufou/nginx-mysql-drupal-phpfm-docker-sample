@@ -13,8 +13,6 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\SchemaCheckTestTrait;
 use Symfony\Component\Yaml\Yaml;
 
-// cspell:ignore onhover
-
 /**
  * @covers \Drupal\ckeditor5\Plugin\Validation\Constraint\ToolbarItemConstraintValidator
  * @covers \Drupal\ckeditor5\Plugin\Validation\Constraint\ToolbarItemDependencyConstraintValidator
@@ -130,12 +128,7 @@ class ValidatorsTest extends KernelTestBase {
             'foobar',
           ],
         ],
-        'plugins' => [
-          'ckeditor5_list' => [
-            'reversed' => FALSE,
-            'startIndex' => FALSE,
-          ],
-        ],
+        'plugins' => [],
       ],
       'violations' => [
         'settings.toolbar.items.5' => 'The provided toolbar item <em class="placeholder">foobar</em> is not valid.',
@@ -336,7 +329,6 @@ class ValidatorsTest extends KernelTestBase {
    * @covers \Drupal\ckeditor5\Plugin\Validation\Constraint\ToolbarItemConstraintValidator
    * @covers \Drupal\ckeditor5\Plugin\Validation\Constraint\ToolbarItemDependencyConstraintValidator
    * @covers \Drupal\ckeditor5\Plugin\Validation\Constraint\EnabledConfigurablePluginsConstraintValidator
-   * @covers \Drupal\ckeditor5\Plugin\Validation\Constraint\SourceEditingPreventSelfXssConstraintValidator
    * @dataProvider providerPair
    *
    * @param array $ckeditor5_settings
@@ -375,7 +367,7 @@ class ValidatorsTest extends KernelTestBase {
   public function providerPair(): array {
     // cspell:ignore donk
     $data = [];
-    $data['VALID: legacy format: filter_autop'] = [
+    $data['INVALID: non-HTML format: filter_autop'] = [
       'settings' => [
         'toolbar' => [
           'items' => [
@@ -396,9 +388,11 @@ class ValidatorsTest extends KernelTestBase {
           'settings' => [],
         ],
       ],
-      'violations' => [],
+      'violations' => [
+        '' => 'CKEditor 5 only works with HTML-based text formats. The "<em class="placeholder">Convert line breaks into HTML (i.e. &lt;code&gt;&amp;lt;br&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;)</em>" (<em class="placeholder">filter_autop</em>) filter implies this text format is not HTML anymore.',
+      ],
     ];
-    $data['VALID: legacy HTML format: filter_autop + filter_url'] = [
+    $data['INVALID: non-HTML format: filter_autop + filter_url'] = [
       'settings' => [
         'toolbar' => [
           'items' => [
@@ -428,9 +422,14 @@ class ValidatorsTest extends KernelTestBase {
           ],
         ],
       ],
-      'violations' => [],
+      'violations' => [
+        '' => [
+          'CKEditor 5 only works with HTML-based text formats. The "<em class="placeholder">Convert URLs into links</em>" (<em class="placeholder">filter_url</em>) filter implies this text format is not HTML anymore.',
+          'CKEditor 5 only works with HTML-based text formats. The "<em class="placeholder">Convert line breaks into HTML (i.e. &lt;code&gt;&amp;lt;br&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;)</em>" (<em class="placeholder">filter_autop</em>) filter implies this text format is not HTML anymore.',
+        ],
+      ],
     ];
-    $data['VALID: legacy HTML format: filter_autop + filter_url (different order)'] = [
+    $data['INVALID: non-HTML format: filter_autop + filter_url (different order)'] = [
       'settings' => [
         'toolbar' => [
           'items' => [
@@ -460,7 +459,12 @@ class ValidatorsTest extends KernelTestBase {
           ],
         ],
       ],
-      'violations' => [],
+      'violations' => [
+        '' => [
+          'CKEditor 5 only works with HTML-based text formats. The "<em class="placeholder">Convert line breaks into HTML (i.e. &lt;code&gt;&amp;lt;br&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;)</em>" (<em class="placeholder">filter_autop</em>) filter implies this text format is not HTML anymore.',
+          'CKEditor 5 only works with HTML-based text formats. The "<em class="placeholder">Convert URLs into links</em>" (<em class="placeholder">filter_url</em>) filter implies this text format is not HTML anymore.',
+        ],
+      ],
     ];
     $data['INVALID: forbidden tags'] = [
       'settings' => [
@@ -502,7 +506,10 @@ class ValidatorsTest extends KernelTestBase {
       ],
       'filters' => $restricted_html_format_filters,
       'violations' => [
-        '' => 'CKEditor 5 needs at least the &lt;p&gt; and &lt;br&gt; tags to be allowed to be able to function. They are not allowed by the "<em class="placeholder">Limit allowed HTML tags and correct faulty HTML</em>" (<em class="placeholder">filter_html</em>) filter.',
+        '' => [
+          'CKEditor 5 only works with HTML-based text formats. The "<em class="placeholder">Convert line breaks into HTML (i.e. &lt;code&gt;&amp;lt;br&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;)</em>" (<em class="placeholder">filter_autop</em>) filter implies this text format is not HTML anymore.',
+          'CKEditor 5 only works with HTML-based text formats. The "<em class="placeholder">Convert URLs into links</em>" (<em class="placeholder">filter_url</em>) filter implies this text format is not HTML anymore.',
+        ],
       ],
     ];
     $data['INVALID: the modified restricted_html text format (with filter_autop and filter_url removed)'] = [
@@ -601,7 +608,7 @@ class ValidatorsTest extends KernelTestBase {
       'violations' => [
         'filters.filter_html' => sprintf(
           'The current CKEditor 5 build requires the following elements and attributes: <br><code>%s</code><br>The following elements are not supported: <br><code>%s</code>',
-          Html::escape('<br> <p> <* dir="ltr rtl" lang>'),
+          Html::escape('<br> <p>'),
           Html::escape('<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type="1 A I"> <li> <dl> <dt> <dd> <h2 id="jump-*"> <h3 id> <h4 id> <h5 id> <h6 id>'),
         ),
       ],
@@ -640,7 +647,6 @@ class ValidatorsTest extends KernelTestBase {
             'heading',
             'bold',
             'italic',
-            'link',
             'sourceEditing',
             'textPartLanguage',
           ],
@@ -660,25 +666,8 @@ class ValidatorsTest extends KernelTestBase {
           ],
           'ckeditor5_sourceEditing' => [
             'allowed_tags' => [
-              // Tag-only; supported by enabled plugin.
               '<strong>',
-              // Tag-only; supported by disabled plugin.
               '<table>',
-              // Tag-only; supported by no plugin.
-              '<exotic>',
-              // Tag + attributes; all supported by enabled plugin.
-              '<span lang>',
-              // Tag + attributes; all supported by an ineligible disabled
-              // plugin (has no toolbar item, has conditions).
-              '<img src>',
-              // Tag + attributes; all supported by disabled plugin.
-              '<code class="language-*">',
-              // Tag + attributes; tag already supported by enabled plugin,
-              // attributes supported by disabled plugin
-              '<h2 class="text-align-center">',
-              // Tag + attributes; tag already supported by enabled plugin,
-              // attribute not supported by no plugin.
-              '<a hreflang>',
             ],
           ],
         ],
@@ -690,9 +679,6 @@ class ValidatorsTest extends KernelTestBase {
       'violations' => [
         'settings.plugins.ckeditor5_sourceEditing.allowed_tags.0' => 'The following tag(s) are already supported by enabled plugins and should not be added to the Source Editing "Manually editable HTML tags" field: <em class="placeholder">Bold (&lt;strong&gt;)</em>.',
         'settings.plugins.ckeditor5_sourceEditing.allowed_tags.1' => 'The following tag(s) are already supported by available plugins and should not be added to the Source Editing "Manually editable HTML tags" field. Instead, enable the following plugins to support these tags: <em class="placeholder">Table (&lt;table&gt;)</em>.',
-        'settings.plugins.ckeditor5_sourceEditing.allowed_tags.3' => 'The following attribute(s) are already supported by enabled plugins and should not be added to the Source Editing "Manually editable HTML tags" field: <em class="placeholder">Language (&lt;span lang&gt;)</em>.',
-        'settings.plugins.ckeditor5_sourceEditing.allowed_tags.5' => 'The following tag(s) are already supported by available plugins and should not be added to the Source Editing "Manually editable HTML tags" field. Instead, enable the following plugins to support these tags: <em class="placeholder">Code Block (&lt;code class=&quot;language-*&quot;&gt;)</em>.',
-        'settings.plugins.ckeditor5_sourceEditing.allowed_tags.6' => 'The following attribute(s) are already supported by available plugins and should not be added to the Source Editing "Manually editable HTML tags" field. Instead, enable the following plugins to support these attributes: <em class="placeholder">Alignment (&lt;h2 class=&quot;text-align-center&quot;&gt;), Align center (&lt;h2 class=&quot;text-align-center&quot;&gt;)</em>.',
       ],
     ];
     $data['INVALID some invalid Source Editable tags provided by plugin and another available in a not enabled plugin'] = [
@@ -826,111 +812,6 @@ class ValidatorsTest extends KernelTestBase {
       'violations' => [
         'settings.toolbar.items.0' => 'The <em class="placeholder">Drupal media</em> toolbar item requires the <em class="placeholder">Embed media</em> filter to be enabled.',
       ],
-    ];
-    $data['VALID: HTML format: very minimal toolbar + wildcard in source editing HTML'] = [
-      'settings' => [
-        'toolbar' => [
-          'items' => [
-            'bold',
-            'sourceEditing',
-          ],
-        ],
-        'plugins' => [
-          'ckeditor5_sourceEditing' => [
-            'allowed_tags' => ['<$text-container data-llama>'],
-          ],
-        ],
-      ],
-      'image_upload' => [
-        'status' => FALSE,
-      ],
-      'filters' => [
-        'filter_html' => [
-          'id' => 'filter_html',
-          'provider' => 'filter',
-          'status' => TRUE,
-          'weight' => 0,
-          'settings' => [
-            'allowed_html' => '<p data-llama> <br> <strong>',
-            'filter_html_help' => TRUE,
-            'filter_html_nofollow' => TRUE,
-          ],
-        ],
-      ],
-      'violations' => [],
-    ];
-    $self_xss_source_editing = [
-      // Dangerous attribute with all values allowed.
-      '<p onhover>',
-      '<img on*>',
-      '<blockquote style>',
-
-      // No danger.
-      '<marquee>',
-
-      // Dangerous attribute with some values allowed.
-      '<a onclick="javascript:*">',
-      '<code style="foo: bar;">',
-
-      // Also works on wildcard tags.
-      '<$text-container style>',
-    ];
-    $data['INVALID: SourceEditing plugin configuration: self-XSS detected when using filter_html'] = [
-      'settings' => [
-        'toolbar' => [
-          'items' => [
-            'sourceEditing',
-          ],
-        ],
-        'plugins' => [
-          'ckeditor5_sourceEditing' => [
-            'allowed_tags' => $self_xss_source_editing,
-          ],
-        ],
-      ],
-      'image_upload' => [
-        'status' => FALSE,
-      ],
-      'filters' => [
-        'filter_html' => [
-          'id' => 'filter_html',
-          'provider' => 'filter',
-          'status' => TRUE,
-          'weight' => 0,
-          'settings' => [
-            'allowed_html' => '<p onhover style> <br> <img on*> <blockquote style> <marquee> <a onclick="javascript:*"> <code style="foo: bar;">',
-            'filter_html_help' => TRUE,
-            'filter_html_nofollow' => TRUE,
-          ],
-        ],
-      ],
-      'violations' => [
-        'settings.plugins.ckeditor5_sourceEditing.allowed_tags.0' => 'The following tag in the Source Editing "Manually editable HTML tags" field is a security risk: <em class="placeholder">&lt;p onhover&gt;</em>.',
-        'settings.plugins.ckeditor5_sourceEditing.allowed_tags.1' => 'The following tag in the Source Editing "Manually editable HTML tags" field is a security risk: <em class="placeholder">&lt;img on*&gt;</em>.',
-        'settings.plugins.ckeditor5_sourceEditing.allowed_tags.2' => 'The following tag in the Source Editing "Manually editable HTML tags" field is a security risk: <em class="placeholder">&lt;blockquote style&gt;</em>.',
-        'settings.plugins.ckeditor5_sourceEditing.allowed_tags.4' => 'The following tag in the Source Editing "Manually editable HTML tags" field is a security risk: <em class="placeholder">&lt;a onclick=&quot;javascript:*&quot;&gt;</em>.',
-        'settings.plugins.ckeditor5_sourceEditing.allowed_tags.5' => 'The following tag in the Source Editing "Manually editable HTML tags" field is a security risk: <em class="placeholder">&lt;code style=&quot;foo: bar;&quot;&gt;</em>.',
-        'settings.plugins.ckeditor5_sourceEditing.allowed_tags.6' => 'The following tag in the Source Editing "Manually editable HTML tags" field is a security risk: <em class="placeholder">&lt;$text-container style&gt;</em>.',
-      ],
-    ];
-    $data['VALID: SourceEditing plugin configuration: self-XSS not detected when not using filter_html'] = [
-      'settings' => [
-        'toolbar' => [
-          'items' => [
-            'sourceEditing',
-          ],
-        ],
-        'plugins' => [
-          'ckeditor5_sourceEditing' => [
-            'allowed_tags' => $self_xss_source_editing,
-          ],
-        ],
-      ],
-      'image_upload' => [
-        'status' => FALSE,
-      ],
-      'filters' => [],
-      'violations' => [],
     ];
 
     return $data;

@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Focusable 1.13.1
+ * jQuery UI Focusable 1.12.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -13,8 +13,6 @@
 //>>docs: http://api.jqueryui.com/focusable-selector/
 
 ( function( factory ) {
-	"use strict";
-
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -24,8 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} )( function( $ ) {
-"use strict";
+} ( function( $ ) {
 
 // Selectors
 $.ui.focusable = function( element, hasTabindex ) {
@@ -73,10 +70,10 @@ function visible( element ) {
 		element = element.parent();
 		visibility = element.css( "visibility" );
 	}
-	return visibility === "visible";
+	return visibility !== "hidden";
 }
 
-$.extend( $.expr.pseudos, {
+$.extend( $.expr[ ":" ], {
 	focusable: function( element ) {
 		return $.ui.focusable( element, $.attr( element, "tabindex" ) != null );
 	}
@@ -84,4 +81,4 @@ $.extend( $.expr.pseudos, {
 
 return $.ui.focusable;
 
-} );
+} ) );

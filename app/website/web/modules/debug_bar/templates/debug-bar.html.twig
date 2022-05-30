@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display something.
+ *
+ * Available variables:
+ * - items: Debug bar items
+ * - attributes: Attributes for the wrapper element.
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes }}>
+  <button id="debug-bar-toggler" class="debug-bar__toggler" aria-expanded="false" aria-controls="debug-bar-items" title="{{ 'Show debug bar'|t }}">
+    <span class="visually-hidden">{{ 'Show debug bar'|t }}</span>
+  </button>
+  {{ items }}
+</div>

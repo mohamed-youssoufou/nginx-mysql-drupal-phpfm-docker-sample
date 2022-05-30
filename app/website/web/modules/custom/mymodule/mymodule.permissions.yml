@@ -1,0 +1,3 @@
+view mymodule page:
+    title: 'permission to access this page'
+    restrict access: TRUE

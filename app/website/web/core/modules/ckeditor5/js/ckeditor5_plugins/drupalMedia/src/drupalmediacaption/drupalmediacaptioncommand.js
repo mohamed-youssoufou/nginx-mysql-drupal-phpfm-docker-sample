@@ -1,8 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* cspell:words imagecaption */
 import { Command } from 'ckeditor5/src/core';
-import { getClosestSelectedDrupalMediaElement, isDrupalMedia } from '../utils';
-import { getMediaCaptionFromModelSelection } from './utils';
+import { isDrupalMedia } from '../utils';
 
 /**
  * Gets the caption model element from the media model selection.
@@ -13,7 +12,7 @@ import { getMediaCaptionFromModelSelection } from './utils';
  *   The caption element or `null` if the selection has no child caption
  *   element.
  */
-function getCaptionFromDrupalMediaModelElement(drupalMediaModelElement) {
+export function getCaptionFromDrupalMediaModelElement(drupalMediaModelElement) {
   // eslint-disable-next-line no-restricted-syntax
   for (const node of drupalMediaModelElement.getChildren()) {
     if (!!node && node.is('element', 'caption')) {
@@ -36,38 +35,21 @@ function getCaptionFromDrupalMediaModelElement(drupalMediaModelElement) {
  *
  * @extends module:core/command~Command
  *
- * @private
+ * @internal
  */
 export default class ToggleDrupalMediaCaptionCommand extends Command {
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   refresh() {
-    const selection = this.editor.model.document.selection;
-    const selectedElement = selection.getSelectedElement();
+    const element = this.editor.model.document.selection.getSelectedElement();
 
-    // When selectedElement is falsy, it is potentially due to multiple elements
-    // being selected, such as elements that descend from `<drupalMedia>`.
-    if (!selectedElement) {
-      // Command should be enabled if `<drupalMedia>` element is part of the
-      // selection.
-      this.isEnabled = !!getClosestSelectedDrupalMediaElement(selection);
-      // Check if the selection descends from a `<drupalMedia>` element that
-      // also includes a `<caption>`.
-      this.value = !!getMediaCaptionFromModelSelection(selection);
-
-      return;
-    }
-
-    // If single element is selected, check if it's a `<drupalMedia>` element.
-    this.isEnabled = isDrupalMedia(selectedElement);
+    this.isEnabled = isDrupalMedia(element);
 
     if (!this.isEnabled) {
       this.value = false;
     } else {
-      // Command value is set based on whether the selected `<drupalMedia>`
-      // element has a `<caption>` as a child element.
-      this.value = !!getCaptionFromDrupalMediaModelElement(selectedElement);
+      this.value = !!getCaptionFromDrupalMediaModelElement(element);
     }
   }
 
@@ -115,7 +97,7 @@ export default class ToggleDrupalMediaCaptionCommand extends Command {
     const mediaCaptionEditing = this.editor.plugins.get(
       'DrupalMediaCaptionEditing',
     );
-    const selectedMedia = getClosestSelectedDrupalMediaElement(selection);
+    const selectedMedia = selection.getSelectedElement();
     const savedCaption = mediaCaptionEditing._getSavedCaption(selectedMedia);
 
     // Try restoring the caption from the DrupalMediaCaptionEditing plugin storage.
@@ -141,20 +123,17 @@ export default class ToggleDrupalMediaCaptionCommand extends Command {
     const editor = this.editor;
     const selection = editor.model.document.selection;
     const mediaCaptionEditing = editor.plugins.get('DrupalMediaCaptionEditing');
-    let selectedElement = selection.getSelectedElement();
-    let captionElement;
+    const selectedMedia = selection.getSelectedElement();
 
-    if (selectedElement) {
-      captionElement = getCaptionFromDrupalMediaModelElement(selectedElement);
-    } else {
-      captionElement = getMediaCaptionFromModelSelection(selection);
-      selectedElement = getClosestSelectedDrupalMediaElement(selection);
+    if (selectedMedia) {
+      const captionElement =
+        getCaptionFromDrupalMediaModelElement(selectedMedia);
+
+      // Store the caption content so it can be restored quickly if the user
+      // changes their mind.
+      mediaCaptionEditing._saveCaption(selectedMedia, captionElement);
+      writer.setSelection(selectedMedia, 'on');
+      writer.remove(captionElement);
     }
-
-    // Store the caption content so it can be restored quickly if the user
-    // changes their mind.
-    mediaCaptionEditing._saveCaption(selectedElement, captionElement);
-    writer.setSelection(selectedElement, 'on');
-    writer.remove(captionElement);
   }
 }

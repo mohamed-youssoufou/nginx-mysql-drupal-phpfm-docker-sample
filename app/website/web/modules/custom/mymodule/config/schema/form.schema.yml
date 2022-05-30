@@ -1,0 +1,7 @@
+# drupalform.company:
+#   type: config_object
+#   label: 'drupal form setting'
+#   mapping:
+#     company:
+#       type: string
+#       label: 'A company name'

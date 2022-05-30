@@ -1,0 +1,10 @@
+name: Views Date Format SQL
+description: 'Allows to format date fields using SQL. This enables group aggregation.'
+type: module
+core_version_requirement: ^8.8 || ^9
+package: Views
+
+# Information added by Drupal.org packaging script on 2022-02-23
+version: '8.x-3.0-alpha2'
+project: 'views_date_format_sql'
+datestamp: 1645643793

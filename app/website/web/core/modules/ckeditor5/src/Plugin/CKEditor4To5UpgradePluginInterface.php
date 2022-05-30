@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\ckeditor5\Plugin;
 
-use Drupal\ckeditor5\HTMLRestrictions;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\filter\FilterFormatInterface;
 
@@ -25,13 +24,10 @@ interface CKEditor4To5UpgradePluginInterface extends PluginInspectionInterface {
    *
    * @param string $cke4_button
    *   A valid CKEditor 4 button name.
-   * @param \Drupal\ckeditor5\HTMLRestrictions $text_format_html_restrictions
-   *   The restrictions of the text format, if this upgrade plugin needs to
-   *   inspect the text format's HTML restrictions to make a decision.
    *
-   * @return string[]|null
-   *   The equivalent CKEditor 5 toolbar items, or NULL if no equivalent exists.
-   *   In either case, the button names must be added to the annotation.
+   * @return string|null
+   *   The equivalent CKEditor 5 toolbar item, or NULL if no equivalent exists.
+   *   In either case, the button name must be added to the annotation.
    *
    * @throws \OutOfBoundsException
    *   Thrown when this plugin does not know whether an equivalent exists.
@@ -39,7 +35,7 @@ interface CKEditor4To5UpgradePluginInterface extends PluginInspectionInterface {
    * @see \Drupal\ckeditor\CKEditorPluginButtonsInterface
    * @see \Drupal\ckeditor5\Annotation\CKEditor4To5Upgrade
    */
-  public function mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem(string $cke4_button, HTMLRestrictions $text_format_html_restrictions): ?array;
+  public function mapCKEditor4ToolbarButtonToCKEditor5ToolbarItem(string $cke4_button): ?string;
 
   /**
    * Maps CKEditor 4 settings to the CKEditor 5 equivalent, if needed.

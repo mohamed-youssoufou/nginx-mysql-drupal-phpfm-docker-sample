@@ -249,7 +249,7 @@ $databases = [];
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = 'oub1XN-AoFwqfHydaMHFq_FkFBCMUA0nErPicYcIJmE-JEJ83tlGhSrtwEn1yfe-TVgb5Zjtvg';
+$settings['hash_salt'] = '9f8zLqmH5r4e5H6e3XrBbayOYmsJWFI9OBA42TVECZ7lJP2xHTyddtkLWmqo57jkg5dx2-J9Lw';
 
 /**
  * Deployment identifier.
@@ -752,6 +752,8 @@ $settings['entity_update_backup'] = TRUE;
  */
 $settings['migrate_node_migrate_type_classic'] = FALSE;
 
+// $settings['cache']['bins']['render'] = 'cache.backend.null';
+
 /**
  * Load local development override configuration, if available.
  *
@@ -766,17 +768,17 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
  * Keep this code block at the end of this file to take full effect.
  */
 #
-# if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
-#   include $app_root . '/' . $site_path . '/settings.local.php';
-# }
+if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+   include $app_root . '/' . $site_path . '/settings.local.php';
+}
 $databases['default']['default'] = array (
-  'database' => 'bai_test',
+  'database' => 'bai',
   'username' => 'root',
-  'password' => 'KoD9hJEL+B/3sR3gYA8lD5KpFlBX7QdQ',
+  'password' => '2,7`m>9sS[o]G_GpkpA9<<$xAkY+C7;F',
   'prefix' => '',
   'host' => 'bai_db',
   'port' => '3306',
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );
-$settings['config_sync_directory'] = 'sites/default/files/config_uuwGPE3dBsgpw8o6ESczJHUpa0z5gMu_hQVQOox44KQ9FWpBtEuWDIlFDqU8hNgFKnL8t0oa0Q/sync';
+$settings['config_sync_directory'] = 'sites/default/files/config_0KJfXyttz5rNoB9s6eL0tdaqlcOfaxiu68J-3YRGGxI8LwaFEvhhOx-3iz9Lbfv16gTwFqBw4w/sync';

@@ -1,8 +1,7 @@
-FROM php:7.3.6-fpm
-LABEL maintainer="charafi.adil@gmail.com"
+FROM php:7.4-fpm
 
 RUN apt-get update && apt-get install -y --fix-missing \
-    mysql-client \
+    # mysql-client \
     imagemagick \
     graphviz \
     git \
@@ -20,20 +19,31 @@ RUN apt-get update && apt-get install -y --fix-missing \
     libssl-dev && \
     rm -r /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/
-RUN docker-php-ext-install \
-    mysqli \
-    pdo_mysql \
-    gd \
-    mbstring \
-    xsl \
-    opcache \
-    calendar \
-    intl \
-    exif \
-    ftp \
-    bcmath \
-    zip
+# RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/
+  
+# docker-php-ext-install \
+    # mysqli \
+# RUN pdo_mysql \
+#     # gd \
+#     mbstring \
+#     xsl \
+#     opcache \
+#     calendar \
+#     intl \
+#     exif \
+#     ftp \
+#     bcmath \
+#     zip
+
+RUN apt-get update && apt-get install -y \
+        mariadb-client\
+		libfreetype6-dev \
+		libjpeg62-turbo-dev \
+		libpng-dev \
+	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
+	&& docker-php-ext-install -j$(nproc) gd
+
+RUN docker-php-ext-install mysqli pdo pdo_mysql pdo_pgsql opcache
 
 RUN cd /usr/src && \
     curl -sS http://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
